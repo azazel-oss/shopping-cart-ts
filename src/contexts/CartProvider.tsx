@@ -5,9 +5,16 @@ type Props = {
   children?: ReactNode;
 };
 
+type Item = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+};
+
 const CartProvider: React.FC<Props> = ({ children }) => {
-  const addItemToCartHandler = (item) => {};
-  const removeItemFromCartHandler = (id) => {};
+  const addItemToCartHandler = (item: Item) => {};
+  const removeItemFromCartHandler = (id: string) => {};
   const cartContext = {
     items: [],
     totalAmount: 0,
