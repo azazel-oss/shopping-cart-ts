@@ -7,12 +7,17 @@ type OverlayProps = {
   children?: ReactNode;
 };
 
+type BackdropProps = {
+  onClick: React.MouseEventHandler;
+};
+
 type ModalProps = {
+  onBackdropClick: React.MouseEventHandler;
   children?: ReactNode;
 };
 
-const Backdrop = () => {
-  return <div className={styles.backdrop} />;
+const Backdrop = ({ onClick }: BackdropProps) => {
+  return <div onClick={onClick} className={styles.backdrop} />;
 };
 
 const ModalOverlay: React.FC<OverlayProps> = ({ children }) => {
@@ -25,10 +30,10 @@ const ModalOverlay: React.FC<OverlayProps> = ({ children }) => {
 
 const portalEl = document.getElementById("overlays") as HTMLElement;
 
-const Modal: React.FC<ModalProps> = ({ children }) => {
+const Modal: React.FC<ModalProps> = ({ onBackdropClick, children }) => {
   return (
     <React.Fragment>
-      {ReactDOM.createPortal(<Backdrop />, portalEl)}
+      {ReactDOM.createPortal(<Backdrop onClick={onBackdropClick} />, portalEl)}
       {ReactDOM.createPortal(<ModalOverlay>{children}</ModalOverlay>, portalEl)}
     </React.Fragment>
   );

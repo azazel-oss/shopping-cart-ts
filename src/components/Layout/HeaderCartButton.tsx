@@ -1,9 +1,13 @@
 import CartIcon from "../Cart/CartIcon";
 import styles from "./HeaderCartButton.module.css";
 
-const HeaderCartButton = () => {
+type Props = {
+  onClick: React.MouseEventHandler;
+};
+
+const HeaderCartButton = ({ onClick }: Props) => {
   return (
-    <button className={styles.button}>
+    <button onClick={onClick} className={styles.button}>
       <span className={styles.icon}>
         <CartIcon />
       </span>
