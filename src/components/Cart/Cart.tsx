@@ -1,15 +1,27 @@
+import { useContext } from "react";
+import CartContext, { CartContextType } from "../../contexts/cartContext";
 import Modal from "../UI/Modal";
 import styles from "./Cart.module.css";
+import CartItem from "./CartItem";
 
 type Props = {
   onHideCart: React.MouseEventHandler;
 };
 
 const Cart = ({ onHideCart }: Props) => {
+  const cart = useContext(CartContext) as CartContextType;
+  const cartAmount = "₹" + cart.totalAmount.toFixed(2);
+  const hasItems = cart.items.length > 0;
   const cartItems = (
     <ul className={styles["cart-items"]}>
-      {[{ id: "c1", name: "Sushi", amount: 2, price: 12.99 }].map((item) => (
-        <li>{item.name}</li>
+      {cart.items.map((item) => (
+        <CartItem
+          price={item.price}
+          name={item.name}
+          amount={item.amount}
+          onAdd={cart.addItem}
+          onRemove={cart.removeItem}
+        />
       ))}
     </ul>
   );
@@ -18,13 +30,13 @@ const Cart = ({ onHideCart }: Props) => {
       {cartItems}
       <div className={styles.total}>
         <span>Total Amount</span>
-        <span>35.22</span>
+        <span>{cartAmount}</span>
       </div>
       <div className={styles.actions}>
         <button onClick={onHideCart} className={styles["button--alt"]}>
           Close
         </button>
-        <button className={styles.button}>Order</button>
+        {hasItems && <button className={styles.button}>Order</button>}
       </div>
     </Modal>
   );

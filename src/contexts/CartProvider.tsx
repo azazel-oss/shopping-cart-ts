@@ -38,10 +38,27 @@ const cartReducer = (
 ) => {
   switch (action.type) {
     case "ADD":
-      return {
-        items: [...state.items, action.payload],
-        totalAmount: state.totalAmount - action.payload.price,
-      };
+      console.log(action.payload);
+      const existingItemIndex = state.items.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      const existingItem = state.items[existingItemIndex];
+      const updatedTotalAmount =
+        state.totalAmount + action.payload.price * action.payload.amount;
+
+      if (existingItem) {
+        state.items[existingItemIndex].amount += action.payload.amount;
+        return {
+          items: [...state.items],
+          totalAmount: updatedTotalAmount,
+        };
+      } else {
+        return {
+          items: [...state.items, action.payload],
+          totalAmount:
+            state.totalAmount + action.payload.price * action.payload.amount,
+        };
+      }
     case "REMOVE":
       return {
         ...state,
@@ -55,6 +72,7 @@ const cartReducer = (
 const CartProvider: React.FC<Props> = ({ children }) => {
   const [cartState, dispatch] = useReducer(cartReducer, defaultCartState);
   const addItemToCartHandler = (item: Item) => {
+    console.log("Add dispatch called");
     dispatch({ type: "ADD", payload: item });
   };
   const removeItemFromCartHandler = (id: string) => {
