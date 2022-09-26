@@ -16,6 +16,8 @@ const Cart = ({ onHideCart }: Props) => {
     <ul className={styles["cart-items"]}>
       {cart.items.map((item) => (
         <CartItem
+          key={item.id}
+          id={item.id}
           price={item.price}
           name={item.name}
           amount={item.amount}

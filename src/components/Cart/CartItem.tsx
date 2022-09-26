@@ -3,6 +3,7 @@ import { Item } from "../../contexts/cartContext";
 import styles from "./CartItem.module.css";
 
 type Props = {
+  id: string;
   price: number;
   name: string;
   amount: number;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 const CartItem: React.FC<Props> = ({
+  id,
   price,
   name,
   amount,
@@ -27,8 +29,8 @@ const CartItem: React.FC<Props> = ({
         </div>
       </div>
       <div className={styles.actions}>
-        <button onClick={onRemove}>−</button>
-        <button onClick={onAdd}>+</button>
+        <button onClick={() => onRemove(id)}>-</button>
+        <button onClick={() => onAdd({ id, name, amount: 1, price })}>+</button>
       </div>
     </li>
   );
