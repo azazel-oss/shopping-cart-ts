@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useReducer } from "react";
 import CartContext from "./cartContext";
 
 type Props = {
@@ -8,19 +8,65 @@ type Props = {
 type Item = {
   id: string;
   name: string;
-  description: string;
+  amount: number;
   price: number;
 };
 
+type Cart = {
+  items: Item[];
+  totalAmount: number;
+};
+
+type AddReducerAction = {
+  type: "ADD";
+  payload: Item;
+};
+
+type RemoveReducerAction = {
+  type: "REMOVE";
+  payload: string;
+};
+
+const defaultCartState: Cart = {
+  items: [],
+  totalAmount: 0,
+};
+
+const cartReducer = (
+  state: Cart,
+  action: AddReducerAction | RemoveReducerAction
+) => {
+  switch (action.type) {
+    case "ADD":
+      return {
+        items: [...state.items, action.payload],
+        totalAmount: state.totalAmount - action.payload.price,
+      };
+    case "REMOVE":
+      return {
+        ...state,
+        items: state.items.filter((item) => item.id === action.payload),
+      };
+    default:
+      return state;
+  }
+};
+
 const CartProvider: React.FC<Props> = ({ children }) => {
-  const addItemToCartHandler = (item: Item) => {};
-  const removeItemFromCartHandler = (id: string) => {};
+  const [cartState, dispatch] = useReducer(cartReducer, defaultCartState);
+  const addItemToCartHandler = (item: Item) => {
+    dispatch({ type: "ADD", payload: item });
+  };
+  const removeItemFromCartHandler = (id: string) => {
+    dispatch({ type: "REMOVE", payload: id });
+  };
   const cartContext = {
-    items: [],
-    totalAmount: 0,
+    items: cartState.items,
+    totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
   };
+
   return (
     <CartContext.Provider value={cartContext}>{children}</CartContext.Provider>
   );

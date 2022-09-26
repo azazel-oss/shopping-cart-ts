@@ -21,7 +21,7 @@ const HeaderCartButton = ({ onClick }: Props) => {
         <CartIcon />
       </span>
       <span>Your Cart</span>
-      <span className={styles.badge}>{cart.items.length}</span>
+      <span className={styles.badge}>{uniqueCartItemsNumber.length}</span>
     </button>
   );
 };

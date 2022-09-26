@@ -3,7 +3,7 @@ import React from "react";
 export type Item = {
   id: string;
   name: string;
-  description: string;
+  amount: number;
   price: number;
 };
 
