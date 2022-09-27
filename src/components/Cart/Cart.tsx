@@ -10,7 +10,7 @@ type Props = {
 
 const Cart = ({ onHideCart }: Props) => {
   const cart = useContext(CartContext) as CartContextType;
-  const cartAmount = "₹" + cart.totalAmount.toFixed(2);
+  const cartAmount = "₹" + Math.abs(cart.totalAmount).toFixed(2);
   const hasItems = cart.items.length > 0;
   const cartItems = (
     <ul className={styles["cart-items"]}>
