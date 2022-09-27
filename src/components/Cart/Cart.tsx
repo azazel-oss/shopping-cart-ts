@@ -1,14 +1,16 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import CartContext, { CartContextType } from "../../contexts/cartContext";
 import Modal from "../UI/Modal";
 import styles from "./Cart.module.css";
 import CartItem from "./CartItem";
+import Checkout from "./Checkout";
 
 type Props = {
   onHideCart: React.MouseEventHandler;
 };
 
 const Cart = ({ onHideCart }: Props) => {
+  const [isOrdering, setIsOrdering] = useState(false);
   const cart = useContext(CartContext) as CartContextType;
   const cartAmount = "₹" + Math.abs(cart.totalAmount).toFixed(2);
   const hasItems = cart.items.length > 0;
@@ -27,19 +29,30 @@ const Cart = ({ onHideCart }: Props) => {
       ))}
     </ul>
   );
+
+  const orderHandler = () => {
+    setIsOrdering(true);
+  };
   return (
     <Modal onBackdropClick={onHideCart}>
-      {cartItems}
+      {!isOrdering && cartItems}
       <div className={styles.total}>
         <span>Total Amount</span>
         <span>{cartAmount}</span>
       </div>
-      <div className={styles.actions}>
-        <button onClick={onHideCart} className={styles["button--alt"]}>
-          Close
-        </button>
-        {hasItems && <button className={styles.button}>Order</button>}
-      </div>
+      {isOrdering && <Checkout onCancel={onHideCart} />}
+      {!isOrdering && (
+        <div className={styles.actions}>
+          <button onClick={onHideCart} className={styles["button--alt"]}>
+            Close
+          </button>
+          {hasItems && (
+            <button className={styles.button} onClick={orderHandler}>
+              Order
+            </button>
+          )}
+        </div>
+      )}
     </Modal>
   );
 };
