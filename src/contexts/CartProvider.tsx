@@ -27,6 +27,11 @@ type RemoveReducerAction = {
   payload: string;
 };
 
+type ClearCartAction = {
+  type: "CLEAR";
+  payload: null;
+};
+
 const defaultCartState: Cart = {
   items: [],
   totalAmount: 0,
@@ -34,7 +39,7 @@ const defaultCartState: Cart = {
 
 const cartReducer = (
   state: Cart,
-  action: AddReducerAction | RemoveReducerAction
+  action: AddReducerAction | RemoveReducerAction | ClearCartAction
 ) => {
   let updatedTotalAmount;
   switch (action.type) {
@@ -81,6 +86,12 @@ const cartReducer = (
         };
       }
 
+    case "CLEAR":
+      return {
+        items: [],
+        totalAmount: 0,
+      };
+
     default:
       return state;
   }
@@ -95,11 +106,16 @@ const CartProvider: React.FC<Props> = ({ children }) => {
   const removeItemFromCartHandler = (id: string) => {
     dispatch({ type: "REMOVE", payload: id });
   };
+
+  const clearCartHandler = () => {
+    dispatch({ type: "CLEAR", payload: null });
+  };
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
+    clearCart: clearCartHandler,
   };
 
   return (

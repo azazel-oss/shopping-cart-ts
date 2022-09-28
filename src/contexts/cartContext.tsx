@@ -12,13 +12,9 @@ export type CartContextType = {
   totalAmount: number;
   addItem: (item: Item) => void;
   removeItem: (id: string) => void;
+  clearCart: () => void;
 };
 
-const CartContext = React.createContext<CartContextType | null>({
-  items: [],
-  totalAmount: 0,
-  addItem: (item: Item) => {},
-  removeItem: (id: string) => {},
-});
+const CartContext = React.createContext<CartContextType | null>(null);
 
 export default CartContext;
